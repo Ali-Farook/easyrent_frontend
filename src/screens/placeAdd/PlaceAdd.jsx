@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./style.css";
 import Navbar from "../../Components/navbar/Navbar";
 import { useNavigate } from "react-router-dom";
-import { uploadHero } from "../../services/ApiList";
+import { createAdd, uploadHero } from "../../services/ApiList";
+import { toast } from "react-toastify";
 
 function PlaceAdd() {
   const navigate = useNavigate();
@@ -55,8 +56,30 @@ function PlaceAdd() {
 
   const onSubmitAdd = async (e) => {
     e.preventDefault();
-    const imageURL = await uploadHero({ heroImage: heroImage });
-    console.log('imageURL===', imageURL)
+    const res = await uploadHero({ heroImage: heroImage });
+    // console.log('imageURL===>', res);
+    const imageURL = res.data.image;
+    const body = {
+      title: add.title,
+      size: Number(add.size),
+      phoneNumber: add.phoneNumber,
+      propertyType: add.propertyType,
+      saleType: add.saleType,
+      price: Number(add.price),
+      address: add.address,
+      heroImage: imageURL,
+    }
+    const response = await createAdd(body);
+    console.log('createAdd===>', response.data);
+    if (response.data.success) {
+      toast.success(response.data.message, {
+        position: "top-right"
+      });
+    } else {
+      toast.error(response.data.message, {
+        position: "top-right"
+      });
+    }
   }
 
   useEffect(() => {
