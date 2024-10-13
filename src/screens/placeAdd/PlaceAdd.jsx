@@ -4,13 +4,13 @@ import Navbar from "../../Components/navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import { createAdd, uploadHero } from "../../services/ApiList";
 import { toast } from "react-toastify";
+import { Oval } from "react-loader-spinner";
 
 function PlaceAdd() {
   const navigate = useNavigate();
   const [heroImage, setHeroImage] = useState(null);
   const [previewHeroImage, setpreviewHeroImageHeroImage] = useState(null);
-  const [images, setImages] = useState([]);
-  const [previewImages, setpreviewImages] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [add, setAdd] = useState({
     title: '',
     size: '',
@@ -22,9 +22,12 @@ function PlaceAdd() {
     heroImage: '',
   });
 
+  // const [images, setImages] = useState([]);
+  // const [previewImages, setpreviewImages] = useState([]);
+
   const onChange = (e) => {
     setAdd({ ...add, [e.target.name]: e.target.value });
-  }
+  };
 
   const handleFileChangeHero = (event) => {
     const file = event.target.files[0];
@@ -37,15 +40,15 @@ function PlaceAdd() {
     }
   };
 
-  const handleFileChanges = (event) => {
-    const files = Array.from(event.target.files);
-    setImages(files);
+  // const handleFileChanges = (event) => {
+  //   const files = Array.from(event.target.files);
+  //   setImages(files);
 
-    const previewUrls = files.map((file) => {
-      return URL.createObjectURL(file);
-    });
-    setpreviewImages(previewUrls);
-  };
+  //   const previewUrls = files.map((file) => {
+  //     return URL.createObjectURL(file);
+  //   });
+  //   setpreviewImages(previewUrls);
+  // };
 
   const checkToken = () => {
     const token = localStorage.getItem('@token');
@@ -56,8 +59,8 @@ function PlaceAdd() {
 
   const onSubmitAdd = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const res = await uploadHero({ heroImage: heroImage });
-    // console.log('imageURL===>', res);
     const imageURL = res.data.image;
     const body = {
       title: add.title,
@@ -70,24 +73,38 @@ function PlaceAdd() {
       heroImage: imageURL,
     }
     const response = await createAdd(body);
-    console.log('createAdd===>', response.data);
+    // console.log('createAdd===>', response.data);
+    setLoading(false);
+
     if (response.data.success) {
       toast.success(response.data.message, {
         position: "top-right"
       });
+      setAdd({
+        title: '',
+        size: '',
+        phoneNumber: '',
+        propertyType: '',
+        saleType: '',
+        price: '',
+        address: '',
+        heroImage: '',
+      });
+      setpreviewHeroImageHeroImage('');
+      setHeroImage('');
     } else {
       toast.error(response.data.message, {
         position: "top-right"
       });
     }
-  }
+  };
 
   useEffect(() => {
     checkToken();
   }, []);
 
   return (
-    <div className="add-property-container">
+    <div className="form-container">
       <Navbar />
       <h2>Add Property</h2>
       <form className="form" onSubmit={onSubmitAdd}>
@@ -96,6 +113,7 @@ function PlaceAdd() {
           <input
             type="text"
             id="title"
+            value={add.title}
             name="title"
             onChange={onChange}
             placeholder="Enter your title"
@@ -109,6 +127,7 @@ function PlaceAdd() {
             type="number"
             id="price"
             name="price"
+            value={add.price}
             onChange={onChange}
             placeholder="Enter your price"
             required
@@ -172,6 +191,7 @@ function PlaceAdd() {
             type="number"
             id="size"
             name="size"
+            value={add.size}
             onChange={onChange}
             placeholder="Enter house size in Marla"
             required
@@ -179,11 +199,12 @@ function PlaceAdd() {
         </div>
 
         <div className="form-group">
-          <label htmlFor="number">Phone Number</label>
+          <label htmlFor="phoneNumber">Phone Number</label>
           <input
             type="tel"
-            id="number"
-            name="number"
+            id="phoneNumber"
+            name="phoneNumber"
+            value={add.phoneNumber}
             onChange={onChange}
             placeholder="Enter your phone number"
             required
@@ -196,6 +217,7 @@ function PlaceAdd() {
             type="text"
             id="address"
             name="address"
+            value={add.address}
             onChange={onChange}
             placeholder="Enter the property address"
             required
@@ -204,7 +226,7 @@ function PlaceAdd() {
 
         <div className="form-group">
           <label htmlFor="saleType">Transaction Type</label>
-          <select id="saleType" name="saleType" required onChange={onChange}>
+          <select id="saleType" name="saleType" value={add.saleType} required onChange={onChange}>
             <option value="">Rent or Sale</option>
             <option value="Rent">Rent</option>
             <option value="Buy">Sale</option>
@@ -213,7 +235,7 @@ function PlaceAdd() {
 
         <div className="form-group" style={{ marginTop: 20 }}>
           <label htmlFor="propertyType">Property Type</label>
-          <select id="propertyType" name="propertyType" required onChange={onChange}>
+          <select id="propertyType" name="propertyType" value={add.propertyType} required onChange={onChange}>
             <option value="">Select Property Type</option>
             <option value="Residential">Residential</option>
             <option value="Commercial">Commercial</option>
@@ -221,11 +243,22 @@ function PlaceAdd() {
         </div>
 
         <div className="form-action">
-          <button type="submit">Add Property</button>
+          <button className="submit-btn" style={{ width: 150, height: 60, display: 'flex', justifyContent: 'center', alignItems: 'center' }} type="submit">
+            <Oval
+              visible={loading}
+              height="30"
+              width="30"
+              color="#fff"
+              ariaLabel="oval-loading"
+              wrapperStyle={{}}
+              wrapperclassName=""
+            />
+            {loading ? '' : 'Add Property'}
+          </button>
         </div>
       </form>
     </div>
   );
-}
+};
 
 export default PlaceAdd;

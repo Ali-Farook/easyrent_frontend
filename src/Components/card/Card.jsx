@@ -1,5 +1,4 @@
 import React from "react";
-import pic from "../../assets/images/pic.jpg";
 
 const Card = (item) => {
   const onMouseEnter = (e) => {
@@ -30,10 +29,10 @@ const Card = (item) => {
         onMouseLeave={onMouseLeave}
       >
         <div style={{ width: "40%", height: "100%", overflow: "hidden" }}>
-          <img
+          {/* <img
             src={pic}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
+          /> */}
         </div>
         <div style={{ marginLeft: 20 }}>
           <h2 style={{ fontFamily: "sans-serif" }}>PKR: 30000</h2>

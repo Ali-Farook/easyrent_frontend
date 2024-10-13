@@ -18,19 +18,19 @@ function Navbar() {
 
 
   return (
-    <div class="navbar">
-      <div class="navbar-logo">
+    <div className="navbar">
+      <div className="navbar-logo">
         <a href="/">Easy Residence</a>
       </div>
-      <div class="navbar-links">
-        <a href="">
+      <div className="navbar-links">
+        <a>
           <Link to="/">Home</Link>
         </a>
-        <a href="">
+        <a>
           <Link to="/placeAdd">Place Add</Link>
         </a>
         {!authToken &&
-          <a href="">
+          <a>
             <Link to="/register">Register</Link>
           </a>
         }

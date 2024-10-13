@@ -4,12 +4,25 @@
   gap: 20px;
 }
 
+@media (min-width: 1024px) {
+  .property-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
 .property-card {
   background-color: white;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: left;
+  border: 1px solid transparent;
+}
+
+.property-card:hover{
+  cursor: pointer;
+  border: 1px solid #6c63ff;
 }
 
 .property-card img {
@@ -41,7 +54,7 @@
 }
 
 .property-info button {
-  background-color: #007bff;
+  background-color: #6c63ff;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -75,4 +88,49 @@
 
 .seacrh:focus {
   border: 1px solid gainsboro;
+}
+
+/* SearchBar.css */
+.search-bar-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 600px;  /* Adjust max-width for a responsive design */
+}
+
+form {
+  display: flex;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-button {
+  padding: 10px 20px;
+  background-color: #6c63ff;  /* Primary button color */
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #574bdc;  /* Darker shade on hover */
+}
+
+form input:focus {
+  outline: none;
+  border-color: #6c63ff;
+}
+
+.search-button:active {
+  background-color: #463aa5;  /* Even darker on click */
 }

@@ -1,100 +1,90 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./style.css";
 import Navbar from "../../../Components/navbar/Navbar";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import pic from "../../../assets/images/pic.jpg";
 import { Link } from "react-router-dom";
+import { getListing } from "../../../services/ApiList";
+
 
 function Home() {
+  const [adds, setAdds] = useState([]);
+  const Images = [
+    'https://imagebuc.s3.eu-north-1.amazonaws.com/easy_rent_Hero/pexels-falling4utah-2724749.jpg',
+    'https://imagebuc.s3.eu-north-1.amazonaws.com/easy_rent_Hero/pexels-karolina-grabowska-4397843.jpg',
+    'https://imagebuc.s3.eu-north-1.amazonaws.com/easy_rent_Hero/pexels-pixabay-534228.jpg'
+  ];
+
+  const getAdds = async () => {
+    const response = await getListing();
+    // console.log('getListing====', response.data.data)
+    if (response.data.success) {
+      setAdds(response.data.data);
+    }
+  };
+
+  useEffect(() => {
+    getAdds()
+  }, []);
+
   return (
     <div className="main-body">
       <Navbar />
-      <div class="hero">
-        <Carousel
-          labels={""}
-          interval={2500}
-          showStatus={false}
-          autoPlay={true}
-          swipeable={true}
-          transitionTime={700}
-          infiniteLoop={true}
-          width={"100%"}
-          ariaLabel=""
-        >
-          <div>
-            <img src={pic} />
-            <p className="legend">Legend 1</p>
-          </div>
-          <div>
-            <img src={pic} />
-            <p className="legend">Legend 1</p>
-          </div>
-          <div>
-            <img src={pic} />
-            <p className="legend">Legend 1</p>
-          </div>
-        </Carousel>
-        <div style={{ zIndex: 10, position: "absolute", top: 300, right: 430 }}>
-          <h1>Find Your Perfect Home</h1>
-          <p>Browse, book, and manage your rental properties with ease.</p>
+      <div className="carousel-wrapper">
+        <div className="carousel-content">
+          <h2 style={{ color: 'white' }}>Welcome to Our Property Showcase</h2>
+          <p>Find your dream home today!</p>
           <Link to="/explore">
-            <button>Explore Properties</button>
+            <button className="carousel-btn">Explore Listings</button>
           </Link>
         </div>
+
+        <Carousel
+          showArrows={true}
+          autoPlay={true}
+          infiniteLoop={true}
+          showThumbs={false}
+          showStatus={false}
+          interval={4000}
+        >
+          {Images.map((image, index) => (
+            <div
+              key={index}
+              className="carousel-slide"
+              style={{
+                backgroundImage: `url(${image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                height: '500px',
+              }}
+            >
+            </div>
+          ))}
+        </Carousel>
       </div>
-      <div class="featured-properties">
+      <div className="featured-properties">
         <h2>Featured Properties</h2>
-        <div class="property-grid">
-          <div class="property-card">
-            <a href="property1.html">
-              <img src="https://via.placeholder.com/300x200" alt="Property 1" />
-            </a>
-            <div class="property-info">
-              <h3>
-                <a href="property1.html">Modern Apartment</a>
-              </h3>
-              <p>Located in the heart of the city.</p>
-              <p class="price">15000/night</p>
+        <div className="property-grid">
+          {adds.map(item => (
+            <div className="property-card" key={item._id}>
               <a href="property1.html">
-                <button>View Details</button>
+                <img src={item.heroImage} alt="Property 1" />
               </a>
+              <div className="property-info">
+                <h3>
+                  {item.title}
+                </h3>
+                <p>{item.address}</p>
+                <p className="price">{item.price}  RS</p>
+                <button>{item.saleType}/{item.propertyType}</button>
+              </div>
             </div>
-          </div>
-          <div class="property-card">
-            <a href="property2.html">
-              <img src="https://via.placeholder.com/300x200" alt="Property 2" />
-            </a>
-            <div class="property-info">
-              <h3>
-                <a href="property2.html">House</a>
-              </h3>
-              <p>Perfect for a weekend getaway.</p>
-              <p class="price">10000/night</p>
-              <a href="property2.html">
-                <button>View Details</button>
-              </a>
-            </div>
-          </div>
-          <div class="property-card">
-            <a href="property3.html">
-              <img src="https://via.placeholder.com/300x200" alt="Property 3" />
-            </a>
-            <div class="property-info">
-              <h3>
-                <a href="property3.html">Luxury Villa</a>
-              </h3>
-              <p>Experience the ultimate comfort.</p>
-              <p class="price">$30000/night</p>
-              <a href="property3.html">
-                <button>View Details</button>
-              </a>
-            </div>
-          </div>
+          ))}
+
         </div>
       </div>
 
-      <div class="footer">
+      <div className="footer">
         <p>&copy; 2024 Smart Rental. All rights reserved.</p>
       </div>
     </div>
