@@ -8,12 +8,23 @@ function Explore() {
   const [adds, setAdds] = useState([]);
   const [location, setLocation] = useState('');
 
-  const getAdds = async () => {
-    const response = await getListing();
-    // console.log('getListing====', response.data.data)
+  const getAdds = async (searchText = '') => {
+    const data = {}
+
+    if (searchText.trim() != '') {
+      data.location = searchText;
+    }
+
+    const response = await getListing(data);
+    console.log('getListing====', response.data.data)
     if (response.data.success) {
       setAdds(response.data.data);
     }
+  };
+
+  const onSearch = (e) => {
+    e.preventDefault();
+    getAdds(location);
   };
 
   useEffect(() => {
@@ -25,7 +36,7 @@ function Explore() {
       <Navbar />
       <div style={{ paddingRight: 20, paddingLeft: 20, marginTop: "1rem", marginBottom: '30px' }}>
         <div className="search-bar-container">
-          <form onSubmit={() => { }}>
+          <form onSubmit={onSearch}>
             <input
               type="text"
               placeholder="Search properties by location..."
@@ -33,7 +44,7 @@ function Explore() {
               onChange={(e) => setLocation(e.target.value)}
               className="search-input"
             />
-            <button type="submit" className="search-button">Search</button>
+            <button type="submit" onClick={onSearch} className="search-button">Search</button>
           </form>
         </div>
 

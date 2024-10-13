@@ -12,9 +12,9 @@ export const signUp = async (body, params) => {
     return response;
 };
 
-export const getListing = async (body, params,) => {
+export const getListing = async (params) => {
     const url = 'api/adds/'
-    const response = await MakeApiRequest('GET', url, body, params, false, false);
+    const response = await MakeApiRequest('GET', url, {}, params, false, false);
     return response;
 };
 
