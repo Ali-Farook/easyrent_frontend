@@ -10,7 +10,8 @@ export const MakeApiRequest = async (
   formData = false
 ) => {
   try {
-    const URL = "http://localhost:5000/";
+    // const URL = "http://localhost:5000/";
+    const URL = "http://16.171.1.45:5000/";
 
     const config = {
       method: method,
