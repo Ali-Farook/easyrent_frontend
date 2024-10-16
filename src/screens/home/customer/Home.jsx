@@ -17,7 +17,7 @@ function Home() {
 
   const getAdds = async () => {
     const response = await getListing();
-    // console.log('getListing====', response.data.data)
+    // console.log('getListing====', response.data.data[0])
     if (response.data.success) {
       setAdds(response.data.data);
     }
@@ -67,16 +67,21 @@ function Home() {
         <div className="property-grid">
           {adds.map(item => (
             <div className="property-card" key={item._id}>
-              <a href="property1.html">
-                <img src={item.heroImage} alt="Property 1" />
-              </a>
-              <div className="property-info">
-                <h3>
-                  {item.title}
-                </h3>
-                <p>{item.address}</p>
-                <p className="price">{item.price}  RS</p>
-                <button>{item.saleType}/{item.propertyType}</button>
+              <img src={item.heroImage} alt="Property 1" />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="property-info">
+                  <h3>
+                    {item.title}
+                  </h3>
+                  <p>{item.address}</p>
+                  <p className="price">{item.price}  RS</p>
+                  <button>{item.saleType}/{item.propertyType}</button>
+                </div>
+
+                <div style={{ marginTop: 10, marginRight: 15 }}>
+                  <h3>{item.userId.firstName} {item.userId.lastName}</h3>
+                  <p style={{ color: '#666' }}>Call: {item.phoneNumber}</p>
+                </div>
               </div>
             </div>
           ))}
