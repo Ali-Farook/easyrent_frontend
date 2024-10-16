@@ -11,7 +11,7 @@ export const MakeApiRequest = async (
 ) => {
   try {
     // const URL = "http://localhost:5000/";
-    const URL = "http://16.171.1.45:5000/";
+    const URL = "http://13.53.187.108:5000/";
 
     const config = {
       method: method,
